@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Spotify Thing</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/vue.js"></script>
+    <script src="js/html2canvas.min.js"></script>
+    <script src="js/app.js?v=4"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Spotify Thing</h1>
+      <hr>
+
+      <div v-if="isLoggedIn && topTracks.length > 0">
+        <div class="story" :class="`theme-${theme}`" ref="canvas">
+          <div class="content">
+            <div class="photo">
+              <div class="gradient"></div>
+              <img :src="topTracks[0].album.images[0].url" alt="">
+            </div>
+
+            <section>
+              <h3>TOP ARTISTS</h3>
+              <ul>
+                <li v-for="(item, index) in topArtists.slice(0, 5)">
+                  <span>{{ index+1 }}</span>
+                  <em>{{ item.name | truncate }}</em>
+                </li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>TOP SONGS</h3>
+              <ul>
+                <li v-for="(item, index) in topTracks.slice(0, 5)">
+                  <span>{{ index+1 }}</span>
+                  <em>{{ item.name | truncate }}</em>
+                </li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>MINUTES LISTENED</h3>
+              <h2>{{ minutesListenedFormatted }}</h2>
+            </section>
+
+            <section>
+              <h3>EST. PAID TO ARTISTS</h3>
+              <h2>{{ estimatedArtistEarningsFormatted }}</h2>
+            </section>
+
+            <footer>
+              <img class="logo" :src="`img/footer-logo-${theme}.png`" alt="Logo">
+              <span>#JusticeAtSpotify</span>
+            </footer>
+          </div>
+        </div>
+
+        <hr>
+        <p>
+          <label>Minutes Listened:</label>
+          <input type="number" v-model="minutesListened" placeholder="Copy this from your Spotify Wrapped or just take a guess">
+        </p>
+        <p>
+          <label>Theme:</label>
+          <a href="#" @click.prevent="theme = n" v-for="n in [1, 2, 3, 4]"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`" style="width:40px;margin-right:10px"></a>
+        </p>
+        <button @click="createImage()">Create Image</button>
+      </div>
+
+      <div v-else>
+        <button @click="login()">Log in with Spotify</button>
+      </div>
+    </div>
+  </body>
+</html>
