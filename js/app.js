@@ -14,6 +14,20 @@ document.addEventListener('DOMContentLoaded', function() {
     return hashParams;
   }
 
+  Vue.component('slide', {
+    template: `
+      <div class="slide">
+        <div>
+          <slot></slot>
+        </div>
+        <nav>
+          <button class="prev" @click="$parent.prevSlide()"></button>
+          <button class="next" @click="$parent.nextSlide()"></button>
+        </nav>
+      </div>
+    `
+  })
+
   const app = new Vue({
     el: '#app',
 
@@ -25,11 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
         profile: {},
         topArtists: [],
         topTracks: [],
-        theme: 1
+        theme: 1,
+        slide: 1
       }
     },
 
     computed: {
+      slideCount() {
+        return 6
+      },
+
       authorizeURL() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`
       },
@@ -153,6 +172,18 @@ document.addEventListener('DOMContentLoaded', function() {
           useCORS: true
         })
         document.body.appendChild(canvas)
+      },
+
+      prevSlide() {
+        if (this.slide > 1) {
+          this.slide--
+        }
+      },
+
+      nextSlide() {
+        if (this.slide < this.slideCount) {
+          this.slide++
+        }
       }
     }
   })
