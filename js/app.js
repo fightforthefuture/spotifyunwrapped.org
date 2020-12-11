@@ -14,20 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return hashParams;
   }
 
-  Vue.component('slide', {
-    template: `
-      <div class="slide">
-        <div>
-          <slot></slot>
-        </div>
-        <nav>
-          <button class="prev" @click="$parent.prevSlide()"></button>
-          <button class="next" @click="$parent.nextSlide()"></button>
-        </nav>
-      </div>
-    `
-  })
-
   const app = new Vue({
     el: '#app',
 
@@ -40,14 +26,43 @@ document.addEventListener('DOMContentLoaded', function() {
         topArtists: [],
         topTracks: [],
         theme: 1,
-        slide: 1
+        slide: 1,
+        hammer: null,
+        imageDataURL: '#',
+        storyTransitionClass: 'scale-in',
+        isMuted: true,
+        music: null
+      }
+    },
+
+    watch: {
+      slide() {
+        // this class messes up the html2canvas output,
+        // so we need to remove it after the transition
+        if (this.isStory) {
+          setTimeout(() => {
+            this.storyTransitionClass = ''
+          }, 500)
+        }
+        else {
+          this.storyTransitionClass = 'scale-in'
+        }
+
+        this.updateMusic()
+      },
+
+      topTracks() {
+        this.updateMusic()
+      },
+
+      theme() {
+        this.$nextTick(this.createImage)
       }
     },
 
     computed: {
-      slideCount() {
-        return 6
-      },
+      themeCount: () => 4,
+      slideCount: () => 6,
 
       authorizeURL() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`
@@ -83,6 +98,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
       estimatedArtistEarningsFormatted() {
         return new Number(this.estimatedArtistEarnings).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+      },
+
+      isStory() {
+        return this.slide === this.slideCount
+      },
+
+      currentTrack() {
+        return this.topTracks[this.slide-1]
       }
     },
 
@@ -100,6 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
 
+    mounted() {
+      Hammer(this.$el).on('swiperight', this.swipeRight)
+      Hammer(this.$el).on('swipeleft', this.swipeLeft)
+    },
+
     filters: {
       truncate(str) {
         const maxLength = 19
@@ -114,10 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     methods: {
-      login() {
-        location.href = this.authorizeURL
-      },
-
       async makeSpotifyRequest(url) {
         const response = await fetch(`https://api.spotify.com/v1/${url}`, {
           headers: {
@@ -168,10 +192,26 @@ document.addEventListener('DOMContentLoaded', function() {
       },
 
       async createImage() {
-        const canvas = await html2canvas(this.$refs.canvas, {
-          useCORS: true
+        const clone = this.$refs.story.cloneNode(true)
+        clone.classList.remove('visible-story')
+        clone.classList.add('hidden-story')
+        document.body.appendChild(clone)
+
+        window.scrollTo(0, 0)
+
+        // generate PNG
+        const canvas = await html2canvas(clone, {
+          useCORS: true,
+          scale: 1,
+          width: 1080,
+          height: 1920,
+          allowTaint: true,
         })
-        document.body.appendChild(canvas)
+
+        canvas.toBlob(blob => {
+          this.imageDataURL = URL.createObjectURL(blob)
+          document.body.removeChild(clone)
+        }, 'image/png')
       },
 
       prevSlide() {
@@ -183,6 +223,50 @@ document.addEventListener('DOMContentLoaded', function() {
       nextSlide() {
         if (this.slide < this.slideCount) {
           this.slide++
+        }
+      },
+
+      swipeLeft() {
+        if (this.isStory) {
+          if (this.theme > 1) {
+            this.theme--
+          }
+        }
+      },
+
+      swipeRight() {
+        if (this.isStory) {
+          if (this.theme < this.themeCount) {
+            this.theme++
+          }
+        }
+      },
+
+      toggleMusic() {
+        this.isMuted = !this.isMuted
+
+        if (this.isMuted) {
+          this.music.pause()
+        }
+        else {
+          this.music.play()
+        }
+      },
+
+      updateMusic() {
+        if (this.music) {
+          this.music.pause()
+        }
+
+        if (this.currentTrack) {
+          console.log(`loading ${this.currentTrack.preview_url}`)
+          this.music = new Audio()
+          this.music.loop = true
+          this.music.src = this.currentTrack.preview_url
+
+          if (!this.isMuted) {
+            this.music.play()
+          }
         }
       }
     }

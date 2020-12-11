@@ -2,121 +2,127 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <title>Spotify Unwrapped</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <script src="js/vue.js"></script>
     <script src="js/html2canvas.min.js"></script>
-    <script src="js/app.js?v=4"></script>
+    <script src="js/hammer.min.js"></script>
+    <script src="js/app.js?v=2"></script>
   </head>
   <body>
     <div id="app">
-<!--       <h1>Spotify Unwrapped (Beta)</h1>
-      <hr> -->
-
-
-
       <div v-if="isLoggedIn && topTracks.length > 0">
         <div class="slide-indicator">
           <div v-for="n in slideCount" :class="n > slide ? 'incomplete' : ''"></div>
         </div>
 
-        <slide v-if="slide == 1">
-          <h2>Genrelust</h2>
-          <p>Who says you have to go outside to explore?</p>
-        </slide>
+        <div class="top-icons">
+          <a href="https://www.unionofmusicians.org/justice-at-spotify" target="_blank" class="logo">
+            <img src="img/header-logo.png" alt="Justice at Spotify logo">
+          </a>
+          <a href="#" @click.prevent="toggleMusic()" class="music">
+            <img v-if="isMuted" src="img/muted-icon.svg" alt="unmute music">
+            <img v-else-if="!isMuted" src="img/unmuted-icon.svg" alt="mute music">
+          </a>
+        </div>
 
-        <slide v-else-if="slide == 2">
-          <h2>Slide 2</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </slide>
+        <div :class="`slide slide-${slide} ${isStory ? 'story-slide' : ''}`">
 
-        <slide v-else-if="slide == 3">
-          <h2>Slide 3</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </slide>
-
-        <slide v-else-if="slide == 4">
-          <h2>Slide 4</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </slide>
-
-        <slide v-else-if="slide == 5">
-          <h2>Slide 5</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </slide>
-
-        <div v-else-if="slide == 6">
-
-          <div class="story" :class="`theme-${theme}`" ref="canvas">
-            <div class="content">
-              <div class="photo">
-                <div class="gradient"></div>
-                <img :src="topTracks[0].album.images[0].url" alt="">
-              </div>
-
-              <section>
-                <h3>TOP ARTISTS</h3>
-                <ul>
-                  <li v-for="(item, index) in topArtists.slice(0, 5)">
-                    <span>{{ index+1 }}</span>
-                    <em>{{ item.name | truncate }}</em>
-                  </li>
-                </ul>
-              </section>
-
-              <section>
-                <h3>TOP SONGS</h3>
-                <ul>
-                  <li v-for="(item, index) in topTracks.slice(0, 5)">
-                    <span>{{ index+1 }}</span>
-                    <em>{{ item.name | truncate }}</em>
-                  </li>
-                </ul>
-              </section>
-
-              <section>
-                <h3>MINUTES LISTENED</h3>
-                <h2>{{ minutesListenedFormatted }}</h2>
-              </section>
-
-              <section>
-                <h3>EST. PAID TO ARTISTS</h3>
-                <h2>{{ estimatedArtistEarningsFormatted }}</h2>
-              </section>
-
-              <footer>
-                <img class="logo" :src="`img/footer-logo-${theme}.png`" alt="Logo">
-                <span>#JusticeAtSpotify</span>
-              </footer>
+          <div v-if="slide == 1">
+            <div class="slide-in">
+              <h2>Genrelust</h2>
+              <p>Who says you have to go outside to explore?</p>
             </div>
           </div>
 
-          <hr>
-          <p>
-            <label>Minutes Listened:</label>
-            <input type="number" v-model="minutesListened" placeholder="Copy this from your Spotify Wrapped or just take a guess">
-          </p>
-          <p>
-            <label>Theme:</label>
-            <a href="#" @click.prevent="theme = n" v-for="n in 4"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`" style="width:40px;margin-right:10px"></a>
-          </p>
-          <button @click="createImage()">Create Image</button>
+          <div v-else-if="slide < slideCount">
+            <div class="slide-in">
+              <h2>Slide {{ slide }}</h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+          </div>
 
+          <div v-else-if="slide == slideCount">
+
+            <div :class="storyTransitionClass">
+              <div class="story-wrapper">
+                <div class="story visible-story" :class="`theme-${theme}`" ref="story">
+                  <div class="content">
+                    <div class="photo">
+                      <div class="gradient"></div>
+                      <img :src="topTracks[0].album.images[0].url" alt="" @load="createImage()">
+                    </div>
+
+                    <section>
+                      <h3>TOP ARTISTS</h3>
+                      <ul>
+                        <li v-for="(item, index) in topArtists.slice(0, 5)">
+                          <span>{{ index+1 }}</span>
+                          <em>{{ item.name | truncate }}</em>
+                        </li>
+                      </ul>
+                    </section>
+
+                    <section>
+                      <h3>TOP SONGS</h3>
+                      <ul>
+                        <li v-for="(item, index) in topTracks.slice(0, 5)">
+                          <span>{{ index+1 }}</span>
+                          <em>{{ item.name | truncate }}</em>
+                        </li>
+                      </ul>
+                    </section>
+
+                    <section>
+                      <h3>MINUTES LISTENED</h3>
+                      <h2>{{ minutesListenedFormatted }}</h2>
+                    </section>
+
+                    <section>
+                      <h3>EST. PAID TO ARTISTS</h3>
+                      <h2>{{ estimatedArtistEarningsFormatted }}</h2>
+                    </section>
+
+                    <footer>
+                      <img class="logo" :src="`img/footer-logo-${theme}.png`" alt="Logo">
+                      <span>#JusticeAtSpotify</span>
+                    </footer>
+                  </div>
+                </div>
+              </div>
+
+              <div class="theme-selector important-ui">
+                <a href="#" @click.prevent="theme = n" v-for="n in themeCount" :class="theme == n ? 'active' : ''"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`"></a>
+              </div>
+
+              <a class="btn btn-white important-ui" :href="imageDataURL" target="_blank">Share</a>
+            </div>
+          </div> <!-- /slide:6 -->
+
+          <nav>
+            <button class="prev" @click="prevSlide()"></button>
+            <button class="next" @click="nextSlide()"></button>
+          </nav>
         </div>
+
+        <footer id="footer" v-if="!isStory">
+          <a href="https://www.unionofmusicians.org/justice-at-spotify" target="_blank" class="sign-petition">
+            <img src="img/petition-icon.svg" alt="">
+            <span>Sign the Petition</span>
+          </a>
+        </footer>
       </div>
 
       <div v-else class="login-screen">
         <div>
-          <h1>
-            <img src="img/footer-logo-1.png" alt="Logo">
-            <span>Spotify Unwrapped (Beta)</span>
-          </h1>
-          <p>To continue, log in to Spotify</p>
+          <img src="img/footer-logo-3.png" alt="Logo" class="logo">
+          <h1>Spotify Unwrapped (Beta)</h1>
+          <p>To continue, log in with Spotify</p>
           <br>
-          <button @click="login()">Log in</button>
+          <a class="btn" :href="authorizeURL">Log in</a>
         </div>
       </div>
     </div>
