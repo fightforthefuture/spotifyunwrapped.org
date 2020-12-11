@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const PERMISSIONS_SCOPE = 'user-read-private user-read-email user-top-read user-library-read'
   const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/`
   const EARINGS_PER_STREAM = 0.0038
+  const SLIDE_SECONDS = 10
 
   function getHashParams() {
     var hashParams = {};
@@ -27,11 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
         topTracks: [],
         theme: 1,
         slide: 1,
-        hammer: null,
         imageDataURL: '#',
         storyTransitionClass: 'scale-in',
         isMuted: true,
-        music: null
+        music: null,
+        slideTimeout: null
       }
     },
 
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         else {
           this.storyTransitionClass = 'scale-in'
+          this.setTimer()
         }
 
         this.updateMusic()
@@ -62,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     computed: {
       themeCount: () => 4,
-      slideCount: () => 6,
+      slideCount: () => 8,
+      storySlide: () => 7,
+      topTrackSlide: () => 5,
 
       authorizeURL() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`
@@ -101,11 +105,16 @@ document.addEventListener('DOMContentLoaded', function() {
       },
 
       isStory() {
-        return this.slide === this.slideCount
+        return this.slide === this.storySlide
       },
 
       currentTrack() {
-        return this.topTracks[this.slide-1]
+        if (this.slide === this.topTrackSlide) {
+          return this.topTracks[0]
+        }
+        else {
+          return this.topTracks[this.slide]
+        }
       }
     },
 
@@ -119,14 +128,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.isLoggedIn) {
           this.fetchTopTracks()
           this.fetchTopArtists()
+          this.setTimer()
         }
       }
     },
 
-    mounted() {
-      Hammer(this.$el).on('swiperight', this.swipeRight)
-      Hammer(this.$el).on('swipeleft', this.swipeLeft)
-    },
+    // mounted() {
+    //   Hammer(this.$el).on('swiperight', this.swipeRight)
+    //   Hammer(this.$el).on('swipeleft', this.swipeLeft)
+    // },
 
     filters: {
       truncate(str) {
@@ -226,21 +236,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       },
 
-      swipeLeft() {
-        if (this.isStory) {
-          if (this.theme > 1) {
-            this.theme--
-          }
-        }
-      },
+      // swipeLeft() {
+      //   if (this.isStory) {
+      //     if (this.theme > 1) {
+      //       this.theme--
+      //     }
+      //   }
+      // },
 
-      swipeRight() {
-        if (this.isStory) {
-          if (this.theme < this.themeCount) {
-            this.theme++
-          }
-        }
-      },
+      // swipeRight() {
+      //   if (this.isStory) {
+      //     if (this.theme < this.themeCount) {
+      //       this.theme++
+      //     }
+      //   }
+      // },
 
       toggleMusic() {
         this.isMuted = !this.isMuted
@@ -267,6 +277,16 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!this.isMuted) {
             this.music.play()
           }
+        }
+      },
+
+      setTimer() {
+        clearTimeout(this.slideTimeout)
+
+        if (this.slide < this.storySlide) {
+          this.slideTimeout = setTimeout(() => {
+            this.nextSlide()
+          }, SLIDE_SECONDS * 1000)
         }
       }
     }

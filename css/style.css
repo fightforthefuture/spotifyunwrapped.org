@@ -49,7 +49,8 @@ body {
   margin: 0;
   background: #000;
   color: #fff;
-  /*overflow: hidden;*/
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: manipulation;
 }
 
 .btn,
@@ -82,6 +83,11 @@ button:hover {
 .btn-white {
   background: var(--white) !important;
   color: var(--black);
+}
+
+.btn-pink {
+  background: var(--pink) !important;
+  color: var(--white);
 }
 
 .story-wrapper {
@@ -215,20 +221,23 @@ button:hover {
 
 .top-icons {
   position: absolute;
-  top: 30px;
-  left: 20px;
+  top: 20px;
+  left: 10px;
+  right: 10px;
   z-index: 2;
-  right: 20px;
+}
+
+.top-icons a {
+  width: 35px;
+  padding: 5px;
 }
 
 .top-icons .logo {
   float: left;
-  width: 25px;
 }
 
 .top-icons .music {
   float: right;
-  width: 25px;
 }
 
 .slide-indicator {
@@ -281,6 +290,10 @@ button:hover {
   font-weight: 600;
 }
 
+.slide p:last-child {
+  margin-bottom: 0;
+}
+
 .slide nav button {
   position: absolute;
   top: 0;
@@ -295,6 +308,60 @@ button:hover {
 
 .slide nav .next {
   right: 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-copy p {
+  opacity: 0;
+  animation-fill-mode: forwards;
+  animation-duration: .6s;
+  animation-name: fade-in;
+  animation-timing-function: ease-in;
+}
+
+.fade-in-copy p:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.fade-in-copy p:nth-child(3) {
+  animation-delay: 2s;
+}
+
+.fade-in-copy p:nth-child(4) {
+  animation-delay: 3s;
+}
+
+.fade-in-copy p:nth-child(5) {
+  animation-delay: 4s;
+}
+
+.fade-in-copy p:nth-child(6) {
+  animation-delay: 5s;
+}
+
+.fade-in-copy p:nth-child(7) {
+  animation-delay: 6s;
+}
+
+.fade-in-copy p:nth-child(8) {
+  animation-delay: 7s;
+}
+
+.fade-in-copy p:nth-child(9) {
+  animation-delay: 8s;
+}
+
+.fade-in-copy p:nth-child(10) {
+  animation-delay: 9s;
 }
 
 @keyframes slide-in {
@@ -329,19 +396,65 @@ button:hover {
   animation: scale-in .5s ease-out;
 }
 
-.slide-1 {
-  background-color: var(--dark-blue);
+.slide-1,
+.slide-5 {
   color: var(--green);
+  background-color: var(--dark-blue);
 }
 
-.slide-2 {
+.slide-2,
+.slide-6 {
   color: var(--pink);
   background-color: var(--light-blue);
 }
 
-.story-slide {
+.slide-3 {
+  color: var(--black);
+  background: var(--red);
+}
+
+.slide-4 {
+  color: var(--light-blue);
+  background: var(--pink);
+}
+
+.slide-8 {
+  background: #000;
+  color: #fff;
+}
+
+.story-slide,
+.slide-8 {
   background-color: #000;
   height: 85vh;
+}
+
+img.top-track {
+  width: 200px;
+  height: 200px;
+}
+
+.slide small {
+  color: var(--white);
+  font-size: 80%;
+}
+
+.slide .logos {
+  margin-bottom: 50px;
+}
+
+.slide .logos .plus {
+  display: block;
+  margin: 10px 0 0;
+  font-size: 32px;
+}
+
+.slide .logos .umaw-logo {
+  width: 100px;
+}
+
+.slide .logos .fftf-logo {
+  width: 250px;
 }
 
 #footer {
