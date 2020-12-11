@@ -28,11 +28,13 @@ ul, li {
 }
 
 h2 {
-  font-size: 60px;
+  font-size: 48px;
+  text-transform: uppercase;
   margin: 0;
 }
 
 h3 {
+  font-weight: 600;
   font-size: 32px;
   margin-bottom: 15px;
 }
@@ -51,6 +53,12 @@ body {
   color: #fff;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   touch-action: manipulation;
+}
+
+#app {
+  max-width: 600px;
+  margin: auto;
+  position: relative;
 }
 
 .btn,
@@ -75,6 +83,22 @@ button:hover {
   background: #1db954;
 }
 
+input[type="number"],
+input[type="text"] {
+  font-size: 14px;
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  padding: 16px;
+  color: ##222326;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9dadc;
+  border-radius: 25px;
+  min-width: 160px;
+  text-align: center;
+}
+
 .important-ui {
   position: relative;
   z-index: 3;
@@ -88,6 +112,16 @@ button:hover {
 .btn-pink {
   background: var(--pink) !important;
   color: var(--white);
+}
+
+.btn-green {
+  background: var(--green) !important;
+  color: var(--dark-blue);
+}
+
+.btn-light-blue {
+  background: var(--light-blue) !important;
+  color: var(--pink);
 }
 
 .story-wrapper {
@@ -162,6 +196,15 @@ button:hover {
   margin-bottom: 50px;
 }
 
+.story section.est-payout {
+  width: 100%;
+  margin-left: 0;
+}
+
+.story section.est-payout h2 {
+  /*font-size: 64px;*/
+}
+
 .story li {
   white-space: nowrap;
   overflow: hidden;
@@ -191,6 +234,7 @@ button:hover {
 }
 
 .story footer img {
+  /*margin-right: 8px;*/
   height: 64px;
 }
 
@@ -240,6 +284,19 @@ button:hover {
   float: right;
 }
 
+.top-icons .sound-indicator {
+  float: right;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  background-color: var(--light-blue);
+  color: var(--pink);
+  border-radius: 50px;
+  padding: 5px 10px;
+}
+
 .slide-indicator {
   position: absolute;
   top: 10px;
@@ -280,11 +337,6 @@ button:hover {
   transition: background-color .5s;
 }
 
-.slide h2 {
-  font-size: 40px;
-  font-weight: 600;
-}
-
 .slide p {
   font-size: 20px;
   font-weight: 600;
@@ -308,6 +360,15 @@ button:hover {
 
 .slide nav .next {
   right: 0;
+}
+
+.slide b {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.slide a:not(.btn) {
+  color: inherit;
 }
 
 @keyframes fade-in {
@@ -396,42 +457,47 @@ button:hover {
   animation: scale-in .5s ease-out;
 }
 
-.slide-1,
-.slide-5 {
+.slide-2,
+.slide-6 {
   color: var(--green);
   background-color: var(--dark-blue);
 }
 
-.slide-2,
-.slide-6 {
+.slide-3,
+.slide-7 {
   color: var(--pink);
   background-color: var(--light-blue);
 }
 
-.slide-3 {
+.slide-3 b,
+.slide-7 b {
+  color: var(--black);
+}
+
+.slide-4 {
   color: var(--black);
   background: var(--red);
 }
 
-.slide-4 {
+.slide-5 {
   color: var(--light-blue);
   background: var(--pink);
 }
 
-.slide-8 {
+.slide-9 {
   background: #000;
   color: #fff;
 }
 
 .story-slide,
-.slide-8 {
+.slide-9 {
   background-color: #000;
   height: 85vh;
 }
 
 img.top-track {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
 }
 
 .slide small {
@@ -615,4 +681,8 @@ img.top-track {
   .theme-selector {
     margin-bottom: 30px;
   }
+}
+
+.spinny-slide img {
+  width: 50%;
 }

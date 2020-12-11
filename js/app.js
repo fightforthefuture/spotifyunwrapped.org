@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
         storyTransitionClass: 'scale-in',
         isMuted: true,
         music: null,
-        slideTimeout: null
+        slideTimeout: null,
+        knowsMusicExist: false
       }
     },
 
@@ -54,19 +55,20 @@ document.addEventListener('DOMContentLoaded', function() {
       },
 
       topTracks() {
-        this.updateMusic()
+        this.$nextTick(this.updateMusic)
+        // this.updateMusic()
       },
 
       theme() {
         this.$nextTick(this.createImage)
-      }
+      },
     },
 
     computed: {
       themeCount: () => 4,
-      slideCount: () => 8,
-      storySlide: () => 7,
-      topTrackSlide: () => 5,
+      slideCount: () => 9,
+      storySlide: () => 8,
+      topTrackSlide: () => 6,
 
       authorizeURL() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`
@@ -88,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
       averageTrackDuration() {
         let total = 0
         this.topTracks.map(t => total += t.duration_ms)
-
         return parseInt(total / this.topTracks.length)
       },
 
@@ -104,6 +105,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return new Number(this.estimatedArtistEarnings).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
       },
 
+      estimatedArtistEarningsPerMinute() {
+        return this.estimatedArtistEarnings / this.minutesListened
+      },
+
+      estimatedArtistEarningsPerMinuteFormatted() {
+        return '$' + new Number(this.estimatedArtistEarningsPerMinute).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})
+      },
+
+      percentagePaidToArtists() {
+        return Math.ceil(this.estimatedArtistEarnings / 120.0 * 100)
+      },
+
+      estimatedArtistCentsPerHour() {
+        return Math.floor(this.estimatedArtistEarningsPerMinute * 60 * 100)
+      },
+
+      estimatedSpotifyShare() {
+        return 120.0 - this.estimatedArtistEarnings
+      },
+
+      estimatedSpotifyShareFormatted() {
+        return new Number(this.estimatedSpotifyShare).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+      },
+
       isStory() {
         return this.slide === this.storySlide
       },
@@ -114,6 +139,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         else {
           return this.topTracks[this.slide]
+        }
+      },
+
+      topGenre() {
+        if (this.topArtists.length < 1) {
+          return ''
+        }
+
+        const genres = {}
+
+        for (let artist of this.topArtists) {
+         for (let genre of artist.genres) {
+            if (!genres[genre]) {
+              genres[genre] = {
+                name: genre,
+                count: 0
+              }
+            }
+
+            genres[genre].count += 1
+          }
+        }
+
+        const sorted = Object.values(genres)
+          .sort((a, b) => a.count - b.count)
+          .reverse()
+
+        // too boring
+        if (sorted[0].name === 'rock' && sorted.length > 1) {
+          return sorted[1].name
+        }
+        else {
+          return sorted[0].name
         }
       }
     },
@@ -126,9 +184,16 @@ document.addEventListener('DOMContentLoaded', function() {
         await this.fetchLoginStatus()
 
         if (this.isLoggedIn) {
+          const random = (min = 0, max = 50) => {
+              let num = Math.random() * (max - min) + min;
+
+              return Math.floor(num);
+          };
+
+          this.minutesListened = random(30000, 36000)
           this.fetchTopTracks()
           this.fetchTopArtists()
-          this.setTimer()
+          // this.setTimer()
         }
       }
     },
@@ -182,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data) {
           this.isLoggedIn = true
           this.profile = data
+          console.log(this.profile)
         }
       },
 
@@ -189,6 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = await this.makeSpotifyRequest('me/top/tracks?time_range=medium_term')
 
         if (data) {
+          console.log(data)
           this.topTracks = data.items
         }
       },
@@ -254,6 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       toggleMusic() {
         this.isMuted = !this.isMuted
+        this.knowsMusicExist = true
 
         if (this.isMuted) {
           this.music.pause()
@@ -283,11 +351,21 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimer() {
         clearTimeout(this.slideTimeout)
 
-        if (this.slide < this.storySlide) {
-          this.slideTimeout = setTimeout(() => {
+        this.slideTimeout = setTimeout(() => {
+          if (this.slide < this.storySlide) {
             this.nextSlide()
-          }, SLIDE_SECONDS * 1000)
+          }
+        }, SLIDE_SECONDS * 1000)
+      },
+
+      trackGoal(goal) {
+        if (window.fathom) {
+          window.fathom.trackGoal(goal, 0)
         }
+      },
+
+      sanitizeMinutesListened() {
+        this.minutesListened = parseInt(this.minutesListened.toString().replace(/[^0-9.]/g, ''))
       }
     }
   })
