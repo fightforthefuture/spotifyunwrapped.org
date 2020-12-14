@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const reader = new FileReader()
           reader.onload = e => {
             this.photoSrc = e.target.result
-            this.createImage()
+            this.$nextTick(this.createImage)
           }
           reader.readAsDataURL(file)
         }

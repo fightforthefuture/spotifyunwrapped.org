@@ -40,7 +40,7 @@ body {
 #app {
   width: 540px;
   max-width: 90%;
-  margin: 50px auto;
+  margin: 25px auto;
 }
 
 .btn {
@@ -328,9 +328,5 @@ form input {
 @media only screen and (max-width: 600px) {
   .visible-image {
     zoom: 25%;
-  }
-
-  #app {
-    margin: 25px auto;
   }
 }
