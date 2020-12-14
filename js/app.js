@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     return hashParams;
   }
 
+  function randomNumber(min = 0, max = 50) {
+    const random = Math.random() * (max - min) + min
+    return Math.floor(random)
+  }
+
   const app = new Vue({
     el: '#app',
 
@@ -117,8 +122,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return Math.ceil(this.estimatedArtistEarnings / 120.0 * 100)
       },
 
+      estimatedArtistEarningsPerHour() {
+        return this.estimatedArtistEarningsPerMinute * 60
+      },
+
+      estimatedArtistEarningsPerHourFormatted() {
+        return '$' + new Number(this.estimatedArtistEarningsPerHour).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
+      },
+
       estimatedArtistCentsPerHour() {
-        return Math.floor(this.estimatedArtistEarningsPerMinute * 60 * 100)
+        return Math.floor(this.estimatedArtistEarningsPerHour * 100)
       },
 
       estimatedSpotifyShare() {
@@ -184,13 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await this.fetchLoginStatus()
 
         if (this.isLoggedIn) {
-          const random = (min = 0, max = 50) => {
-              let num = Math.random() * (max - min) + min;
-
-              return Math.floor(num);
-          };
-
-          this.minutesListened = random(30000, 36000)
+          this.minutesListened = randomNumber(30000, 36000)
           this.fetchTopTracks()
           this.fetchTopArtists()
           // this.setTimer()
@@ -247,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data) {
           this.isLoggedIn = true
           this.profile = data
-          console.log(this.profile)
         }
       },
 
@@ -255,7 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = await this.makeSpotifyRequest('me/top/tracks?time_range=medium_term')
 
         if (data) {
-          console.log(data)
           this.topTracks = data.items
         }
       },
@@ -365,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
 
       sanitizeMinutesListened() {
-        this.minutesListened = parseInt(this.minutesListened.toString().replace(/[^0-9.]/g, ''))
+        this.minutesListened = parseInt(this.minutesListened.toString().replace(/[^0-9.]/g, '')) || 0
       }
     }
   })

@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spotify Unwrapped (Artists)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta property="og:title" content="Spotify Unwrapped 2020">
+    <meta property="og:description" content="Support artists, take action. Create your Spotify Unwrapped story.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Spotify Unwrapped">
+    <meta property="og:url" content="https://www.spotifyunwrapped.org">
+    <meta property="og:image" content="https://www.spotifyunwrapped.org/img/share.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/artists.css" />
+
+    <script src="js/vue.js"></script>
+    <script src="js/html2canvas.min.js"></script>
+    <script src="js/artists.js"></script>
+    <script src="https://cdn.usefathom.com/script.js" data-site="HUFVFVBY" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="image visible-image" :class="`theme-${theme}`" ref="canvas">
+        <div class="content">
+          <h1 :class="name.length > 38 ? 'long-name' : ''">{{ name || '🤔' }}</h1>
+
+          <div class="stats">
+            <p>
+              <label>STREAMS</label>
+              <strong>{{ streams | formatNumber }}</strong>
+            </p>
+
+            <p>
+              <label>HOURS</label>
+              <strong>{{ hours | formatNumber }}</strong>
+            </p>
+
+            <p>
+              <label>LISTENERS</label>
+              <strong>{{ listeners | formatNumber }}</strong>
+            </p>
+
+            <p>
+              <label>COUNTRIES</label>
+              <strong>{{ countries | formatNumber }}</strong>
+            </p>
+          </div>
+
+          <div class="photo">
+            <div class="gradient"></div>
+            <div class="photo-image" :style="{ backgroundImage: `url('${photoSrc}')` }"></div>
+          </div>
+
+          <footer>
+            <img class="logo" :src="`img/footer-logo-${theme}.png`" alt="Logo">
+            <span>SPOTIFYUNWRAPPED.ORG</span>
+          </footer>
+        </div>
+      </div>
+
+      <form @submit.prevent="createImage()">
+        <p>
+          <label for="name">Name:</label>
+          <input id="name" v-model.trim="name" type="text" placeholder="Artist name" @change="createImage">
+        </p>
+
+        <p>
+          <label for="image">Image:</label>
+          <input id="image" type="file" placeholder="Image file" @change="selectPhoto" ref="photoFile">
+        </p>
+
+        <p>
+          <label for="streams">Stream Count:</label>
+          <input id="streams" v-model="streams" type="number" placeholder="Streams" @change="createImage">
+        </p>
+
+        <p>
+          <label for="hours">Hours Streamed:</label>
+          <input id="hours" v-model="hours" type="number" placeholder="Hours" @change="createImage">
+        </p>
+
+        <p>
+          <label for="listeners">Listener Count:</label>
+          <input id="listeners" v-model="listeners" type="number" placeholder="Listeners" @change="createImage">
+        </p>
+
+        <p>
+          <label for="countries">Country Count:</label>
+          <input id="countries" v-model="countries" type="number" placeholder="Countries" @change="createImage">
+        </p>
+
+        <p>
+          <label>Theme:</label>
+          <span class="theme-selector">
+            <a href="#" @click.prevent="theme = n" v-for="n in themeCount" :class="theme == n ? 'active' : ''"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`"></a>
+          </span>
+        </p>
+
+        <p>
+          <br>
+          <a class="btn" :href="imageDataURL" target="_blank" @click="trackGoal('X8K7JHTE')">Share</a>
+        </p>
+      </form>
+    </div>
+  </body>
+</html>
