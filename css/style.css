@@ -193,16 +193,8 @@ input[type="text"] {
   margin-left: 2%;
   width: 48%;
   float: left;
-  margin-bottom: 50px;
-}
-
-.story section.est-payout {
-  width: 100%;
-  margin-left: 0;
-}
-
-.story section.est-payout h2 {
-  /*font-size: 64px;*/
+  min-height: 220px;
+  margin-bottom: 25px;
 }
 
 .story li {
