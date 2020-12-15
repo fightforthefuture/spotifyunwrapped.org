@@ -57,7 +57,7 @@
 
               <div class="important-ui">
                 <p>
-                  <input v-model="minutesListened" type="text" placeholder="Minutes listened" @keyup="sanitizeMinutesListened()">
+                  <input v-model="minutesListened" type="text" placeholder="Minutes listened">
                 </p>
                 <p>
                   <button class="btn btn-light-blue" @click.prevent="nextSlide()">Continue</button>
@@ -69,8 +69,8 @@
           <div v-if="slide == 2">
             <div class="slide-in fade-in-copy">
               <h3>The deal of a lifetime!</h3>
-              <p>You listened to <b>{{ minutesListenedFormatted }}</b> minutes of music in 2020</p>
-              <p>Yet Spotify only paid <b>{{ estimatedArtistEarningsFormatted }}</b> to your artists.</p>
+              <p>You listened to <b>{{ minutesListenedInt | formatNumber }}</b> minutes of music in 2020</p>
+              <p>yet Spotify only paid <b>{{ estimatedArtistEarnings | formatCurrency }}</b> to your artists.</p>
               <p><br>For the whole year!</p>
             </div>
           </div>
@@ -79,8 +79,8 @@
             <div class="slide-in fade-in-copy">
               <h3>Spotify believes that of the <b>$120</b> a user pays per year…</h3>
               <p>it’s fair to pay the actual music-makers</p>
-              <p>Less than <b>{{ percentagePaidToArtists }}%</b> of your subscription.</p>
-              <p><br>That comes out to <b>{{ estimatedArtistEarningsPerHourFormatted }}</b> per hour paid to musicians.</p>
+              <p>less than <b>{{ percentagePaidToArtists }}%</b> of your subscription.</p>
+              <p><br>That comes out to <b>{{ estimatedArtistEarningsPerHour | formatCurrency }}</b> per hour paid to musicians.</p>
             </div>
           </div>
 
@@ -153,17 +153,17 @@
 
                     <section>
                       <h3>MINUTES LISTENED</h3>
-                      <h2>{{ minutesListenedFormatted }}</h2>
+                      <h2>{{ minutesListenedInt | formatNumber }}</h2>
                     </section>
 
                     <section>
                       <h3>MY SUBSCRIPTION PAID ARTISTS</h3>
-                      <h2>{{ estimatedArtistEarningsFormatted }}</h2>
+                      <h2>{{ estimatedArtistEarnings | formatCurrency }}</h2>
                     </section>
 
 <!--                     <section>
-                      <h3>I PAID ARTISTS PER MINUTE</h3>
-                      <h2>{{ estimatedArtistEarningsPerMinuteFormatted }}</h2>
+                      <h3>MY SUBSCRIPTION PAID ARTISTS PER MINUTE</h3>
+                      <h2>{{ estimatedArtistEarningsPerMinute | formatCurrency }}</h2>
                     </section> -->
 
                     <section>

@@ -79,17 +79,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`
       },
 
-      minutesListenedFormatted() {
-        return new Number(this.minutesListened).toLocaleString()
+      minutesListenedInt() {
+        return parseInt(this.minutesListened.toString().replace(/[^0-9.]/g, '')) || 0
       },
 
       millisecondsListened() {
-        if (this.minutesListened) {
-          return this.minutesListened * 60 * 1000
-        }
-        else {
-          return 0
-        }
+        return this.minutesListenedInt * 60 * 1000
       },
 
       averageTrackDuration() {
@@ -106,16 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return EARINGS_PER_STREAM * this.estimatedStreamCount
       },
 
-      estimatedArtistEarningsFormatted() {
-        return new Number(this.estimatedArtistEarnings).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-      },
-
       estimatedArtistEarningsPerMinute() {
-        return this.estimatedArtistEarnings / this.minutesListened
-      },
-
-      estimatedArtistEarningsPerMinuteFormatted() {
-        return '$' + new Number(this.estimatedArtistEarningsPerMinute).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})
+        return this.estimatedArtistEarnings / this.minutesListenedInt
       },
 
       percentagePaidToArtists() {
@@ -126,20 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return this.estimatedArtistEarningsPerMinute * 60
       },
 
-      estimatedArtistEarningsPerHourFormatted() {
-        return '$' + new Number(this.estimatedArtistEarningsPerHour).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
-      },
-
       estimatedArtistCentsPerHour() {
         return Math.floor(this.estimatedArtistEarningsPerHour * 100)
-      },
-
-      estimatedSpotifyShare() {
-        return 120.0 - this.estimatedArtistEarnings
-      },
-
-      estimatedSpotifyShareFormatted() {
-        return new Number(this.estimatedSpotifyShare).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
       },
 
       isStory() {
@@ -189,22 +164,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
 
-    async created() {
-      const params = getHashParams()
-
-      if (params.access_token) {
-        this.accessToken = params.access_token
-        await this.fetchLoginStatus()
-
-        if (this.isLoggedIn) {
-          this.minutesListened = randomNumber(30000, 36000)
-          this.fetchTopTracks()
-          this.fetchTopArtists()
-          this.setTimer()
-        }
-      }
-    },
-
     filters: {
       truncate(str) {
         const maxLength = 19
@@ -214,6 +173,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         else {
           return str
+        }
+      },
+
+      formatNumber(number) {
+        return new Number(number).toLocaleString()
+      },
+
+      formatCurrency(number) {
+        return new Number(number).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        })
+      }
+    },
+
+    async created() {
+      const params = getHashParams()
+
+      if (params.access_token) {
+        this.accessToken = params.access_token
+        await this.fetchLoginStatus()
+
+        if (this.isLoggedIn) {
+          this.minutesListened = randomNumber(30000, 36000).toLocaleString()
+          this.fetchTopTracks()
+          this.fetchTopArtists()
+          this.setTimer()
         }
       }
     },
@@ -346,10 +332,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.fathom) {
           window.fathom.trackGoal(goal, 0)
         }
-      },
-
-      sanitizeMinutesListened() {
-        this.minutesListened = parseInt(this.minutesListened.toString().replace(/[^0-9.]/g, '')) || 0
       }
     }
   })
