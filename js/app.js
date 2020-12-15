@@ -200,15 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
           this.minutesListened = randomNumber(30000, 36000)
           this.fetchTopTracks()
           this.fetchTopArtists()
-          // this.setTimer()
+          this.setTimer()
         }
       }
     },
-
-    // mounted() {
-    //   Hammer(this.$el).on('swiperight', this.swipeRight)
-    //   Hammer(this.$el).on('swipeleft', this.swipeLeft)
-    // },
 
     filters: {
       truncate(str) {
@@ -307,22 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
           this.slide++
         }
       },
-
-      // swipeLeft() {
-      //   if (this.isStory) {
-      //     if (this.theme > 1) {
-      //       this.theme--
-      //     }
-      //   }
-      // },
-
-      // swipeRight() {
-      //   if (this.isStory) {
-      //     if (this.theme < this.themeCount) {
-      //       this.theme++
-      //     }
-      //   }
-      // },
 
       toggleMusic() {
         this.isMuted = !this.isMuted
