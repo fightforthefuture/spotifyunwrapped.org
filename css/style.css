@@ -226,8 +226,11 @@ input[type="text"] {
 }
 
 .story footer img {
-  /*margin-right: 8px;*/
   height: 64px;
+}
+
+.story footer span {
+  font-weight: 700;
 }
 
 .theme-selector {
