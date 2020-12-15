@@ -69,20 +69,19 @@
 
           <div v-if="slide == 2">
             <div class="slide-in fade-in-copy">
-              <h3>Let's start you off with a win.</h3>
-              <p>The deal of a lifetime</p>
+              <h3>The deal of a lifetime!</h3>
               <p>You listened to <b>{{ minutesListenedFormatted }}</b> minutes of music in 2020</p>
-              <p>Yet Spotify only paid <b>{{ estimatedArtistEarningsFormatted }}</b> to your artists</p>
-              <p>For the whole year!</p>
+              <p>Yet Spotify only paid <b>{{ estimatedArtistEarningsFormatted }}</b> to your artists.</p>
+              <p><br>For the whole year!</p>
             </div>
           </div>
 
           <div v-if="slide == 3">
             <div class="slide-in fade-in-copy">
-              <h3>Spotify believes that of the <b>$120</b> a user pays per year</h3>
-              <p>It’s fair to pay the actual music-makers</p>
-              <p>Less than <b>{{ percentagePaidToArtists }}%</b> of your money.</p>
-              <p>That comes out to <b>{{ estimatedArtistEarningsPerHourFormatted }}</b> per hour that you paid to musicians.</p>
+              <h3>Spotify believes that of the <b>$120</b> a user pays per year…</h3>
+              <p>it’s fair to pay the actual music-makers</p>
+              <p>Less than <b>{{ percentagePaidToArtists }}%</b> of your subscription.</p>
+              <p><br>That comes out to <b>{{ estimatedArtistEarningsPerHourFormatted }}</b> per hour paid to musicians.</p>
             </div>
           </div>
 
@@ -118,7 +117,7 @@
             <div class="slide-in fade-in-copy">
               <h3>A year like 2020 required backup.</h3>
               <p>Musicians have not received any from Spotify.</p>
-              <p>So, what about you?</p>
+              <p>Tell them to make a change by sharing Justice at Spotify.</p>
             </div>
           </div>
 
@@ -159,13 +158,18 @@
                     </section>
 
                     <section>
-                      <h3>I PAID ARTISTS</h3>
+                      <h3>MY SUBSCRIPTION PAID ARTISTS</h3>
                       <h2>{{ estimatedArtistEarningsFormatted }}</h2>
                     </section>
 
-                    <section>
+<!--                     <section>
                       <h3>I PAID ARTISTS PER MINUTE</h3>
                       <h2>{{ estimatedArtistEarningsPerMinuteFormatted }}</h2>
+                    </section> -->
+
+                    <section>
+                      <h3>AVG. ROYALTY PAID PER STREAM</h3>
+                      <h2>$0.0038</h2>
                     </section>
 
                     <section>
