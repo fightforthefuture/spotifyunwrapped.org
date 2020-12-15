@@ -37,8 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         storyTransitionClass: 'scale-in',
         isMuted: true,
         music: null,
-        slideTimeout: null,
-        knowsMusicExist: false
+        slideTimeout: null
       }
     },
 
@@ -46,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
       slide() {
         // this class messes up the html2canvas output,
         // so we need to remove it after the transition
-        if (this.isStory) {
+        if (this.slide == this.storySlide) {
           setTimeout(() => {
             this.storyTransitionClass = ''
           }, 500)
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       topTracks() {
         this.$nextTick(this.updateMusic)
-        // this.updateMusic()
       },
 
       theme() {
@@ -115,10 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       estimatedArtistCentsPerHour() {
         return Math.floor(this.estimatedArtistEarningsPerHour * 100)
-      },
-
-      isStory() {
-        return this.slide === this.storySlide
       },
 
       currentTrack() {

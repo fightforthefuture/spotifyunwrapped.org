@@ -40,7 +40,7 @@
           </a>
         </div>
 
-        <div :class="`slide slide-${slide} ${isStory ? 'story-slide' : ''}`">
+        <div :class="`slide slide-${slide} ${slide == storySlide ? 'story-slide' : ''}`">
 
           <div v-if="slide == 1">
             <div class="slide-in">
