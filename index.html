@@ -82,22 +82,13 @@
 
           <div v-if="slide == 3">
             <div class="slide-in fade-in-copy">
-              <h3>Spotify believes that of the <b>$120</b> a user pays per year…</h3>
-              <p>it’s fair to pay the actual music-makers</p>
-              <p>less than <b>{{ percentagePaidToArtists }}%</b> of your subscription.</p>
-              <p><br>That comes out to <b>{{ estimatedArtistEarningsPerHour | formatCurrency }}</b> per hour paid to musicians.</p>
-            </div>
-          </div>
-
-          <div v-if="slide == 4">
-            <div class="slide-in fade-in-copy">
               <h3>Where did the rest of that money go?</h3>
               <p>Spotify’s profit for the first 3 quarters of 2020 is <b>$1.7 Billion USD</b>.</p>
               <p>While musicians, with no live shows, struggled to put food on the table and keep their homes.</p>
             </div>
           </div>
 
-          <div v-if="slide == 5">
+          <div v-if="slide == 4">
             <div class="slide-in fade-in-copy">
               <h3>How are your top artists doing?</h3>
               <p v-for="artist in topArtists.slice(0, 5)">{{ artist.name }}</p>
@@ -105,7 +96,7 @@
             </div>
           </div>
 
-          <div v-if="slide == 6">
+          <div v-if="slide == 5">
             <div class="slide-in fade-in-copy">
               <h3>One song helped you get through it all.</h3>
               <p>
@@ -117,7 +108,7 @@
             </div>
           </div>
 
-          <div v-if="slide == 7">
+          <div v-if="slide == 6">
             <div class="slide-in fade-in-copy">
               <h3>A year like 2020 required backup.</h3>
               <p>Musicians have not received any from Spotify.</p>
@@ -125,7 +116,7 @@
             </div>
           </div>
 
-          <div v-if="slide == 8">
+          <div v-if="slide == 7">
 
             <div :class="storyTransitionClass">
               <div class="story-wrapper">
@@ -162,7 +153,7 @@
                     </section>
 
                     <section>
-                      <h3>MY SUBSCRIPTION PAID ARTISTS</h3>
+                      <h3>SPOTIFY PAID ARTISTS</h3>
                       <h2>{{ estimatedArtistEarnings | formatCurrency }}</h2>
                     </section>
 
@@ -197,7 +188,7 @@
             </div>
           </div> <!-- /story slide -->
 
-          <div v-if="slide == 9">
+          <div v-if="slide == 8">
             <div class="slide-in fade-in-copy">
               <h3>Hey Spotify, listening is everything.</h3>
               <p>A project by:</p>

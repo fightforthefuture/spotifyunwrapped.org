@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     computed: {
       themeCount: () => 4,
-      slideCount: () => 9,
-      storySlide: () => 8,
-      topTrackSlide: () => 6,
+      slideCount: () => 8,
+      storySlide: () => 7,
+      topTrackSlide: () => 5,
 
       authorizeURL() {
         return `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URL)}&scope=${encodeURIComponent(PERMISSIONS_SCOPE)}&state=fftf-spotify2020&show_dialog=true`

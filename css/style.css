@@ -35,7 +35,7 @@ h2 {
 
 h3 {
   font-weight: 600;
-  font-size: 32px;
+  font-size: 30px;
   margin-bottom: 15px;
 }
 
@@ -480,13 +480,13 @@ input[type="text"] {
   background: var(--pink);
 }
 
-.slide-9 {
+.slide-8 {
   background: #000;
   color: #fff;
 }
 
 .story-slide,
-.slide-9 {
+.slide-8 {
   background-color: #000;
   height: 85vh;
 }
