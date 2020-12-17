@@ -7,10 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     data() {
       return {
         name: 'Jeff Bezos Blues Explosion',
-        streams: 239567881456,
-        hours: 9500000,
-        listeners: 2536,
-        countries: 92,
+        streams: 654321,
+        hours: 65432,
+        listeners: 5432,
+        earnings: 0.0,
+        hasAutomaticEarnings: true,
         image: null,
         theme: 1,
         photoSrc: 'img/sample-artist.jpg',
@@ -21,6 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
     watch: {
       theme() {
         this.$nextTick(this.createImage)
+      },
+
+      streams() {
+        if (this.hasAutomaticEarnings) {
+          this.calculateEarnings()
+        }
       }
     },
 
@@ -62,6 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
           return new Number(intNumber).toLocaleString()
         }
       }
+    },
+
+    created() {
+      this.calculateEarnings()
     },
 
     mounted() {
@@ -111,6 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.fathom) {
           window.fathom.trackGoal(goal, 0)
         }
+      },
+
+      calculateEarnings() {
+        this.earnings = EARINGS_PER_STREAM * parseInt(this.streams)
       }
     }
   })

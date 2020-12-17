@@ -35,19 +35,24 @@
               <strong>{{ streams | formatNumber }}</strong>
             </p>
 
-            <p>
+            <p v-if="hours">
               <label>HOURS</label>
               <strong>{{ hours | formatNumber }}</strong>
             </p>
 
-            <p>
+            <p v-if="listeners">
               <label>LISTENERS</label>
               <strong>{{ listeners | formatNumber }}</strong>
             </p>
 
             <p>
-              <label>COUNTRIES</label>
-              <strong>{{ countries | formatNumber }}</strong>
+              <label>ROYALTIES</label>
+              <strong>${{ earnings | formatNumber }}</strong>
+            </p>
+
+            <p>
+              <label>SPOTIFY 2020 PROFITS (EST)</label>
+              <strong>${{ 2325523200 | formatNumber }}</strong>
             </p>
           </div>
 
@@ -64,6 +69,7 @@
       </div>
 
       <form @submit.prevent="createImage()">
+        <p class="note">You can fill this in from your Spotify dashboard or just make stuff up.</p>
         <p>
           <label for="name">Name:</label>
           <input id="name" v-model.trim="name" type="text" placeholder="Artist name" @change="createImage">
@@ -90,8 +96,14 @@
         </p>
 
         <p>
-          <label for="countries">Country Count:</label>
-          <input id="countries" v-model="countries" type="number" placeholder="Countries" @change="createImage">
+          <label for="earnings">Royalties:</label>
+          <input id="earnings" v-model="earnings" type="number" placeholder="Royalties paid by Spotify" @change="createImage" :disabled="hasAutomaticEarnings">
+          <small>
+            <label>
+              <input type="checkbox" v-model="hasAutomaticEarnings">
+              <span>Calculate automatically (stream count X 0.0038)</span>
+            </label>
+          </small>
         </p>
 
         <p>

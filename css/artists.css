@@ -61,10 +61,15 @@ body {
   text-align: center;
 }
 
+.note {
+  color: var(--light-blue);
+}
+
 .image {
   width: 1080px;
   height: 1080px;
-  background-image: linear-gradient(to bottom, #4534e9, #ce00b6, #ff007f, #ff5554, #ff913d, #f39839, #e79e37, #dba338, #c6802a, #ae5e20, #933d18, #761d11);
+  /*background-image: linear-gradient(to bottom, #4534e9, #ce00b6, #ff007f, #ff5554, #ff913d, #f39839, #e79e37, #dba338, #c6802a, #ae5e20, #933d18, #761d11);*/
+  background-image: linear-gradient(to bottom, #c0eabd, #b8d08d, #b9b35f, #bd9339, #c16f20, #c75625, #c93830, #c7003f, #c40058, #b40078, #90009c, #3b00c0);
   margin: auto;
   display: flex;
   align-items: center;
@@ -107,7 +112,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(to bottom, #e6e982, #e2ca60, #ddaa45, #d78a30, #ce6824, #d2512c, #d23437, #cf0045, #d20066, #c5008f, #a000bd, #3e31e9);
+  /*background-image: linear-gradient(to bottom, #e6e982, #e2ca60, #ddaa45, #d78a30, #ce6824, #d2512c, #d23437, #cf0045, #d20066, #c5008f, #a000bd, #3e31e9);*/
+  background-image: linear-gradient(to bottom, #c0eabd, #b8d08d, #b9b35f, #bd9339, #c16f20, #c75625, #c93830, #c7003f, #c40058, #b40078, #90009c, #3b00c0);
   border-radius: 100%;
 }
 
@@ -142,17 +148,17 @@ body {
 }
 
 .image p {
-  margin: 40px 0;
+  margin: 30px 0;
 }
 
 .image label {
   display: block;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .image strong {
   display: block;
-  font-size: 64px;
+  font-size: 50px;
 }
 
 .image footer {
@@ -203,6 +209,19 @@ form input {
   padding: 12px;
   border-radius: 5px;
   border: none;
+}
+
+small label {
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+}
+
+small input[type="checkbox"] {
+  display: inline-block;
+  padding: 0;
+  margin-right: 5px;
+  width: auto;
 }
 
 .theme-selector {
