@@ -85,9 +85,12 @@ body {
   width: 85%;
   height: 85%;
   position: relative;
-  transition: background-color .2s;
   border-radius: 20px;
   overflow: hidden;
+}
+
+.visible-image .content {
+  transition: background-color .2s;
 }
 
 .image .stats {

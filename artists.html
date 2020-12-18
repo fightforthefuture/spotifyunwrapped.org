@@ -71,6 +71,13 @@
       <form @submit.prevent="createImage()">
         <p class="note">You can fill this in from your Spotify dashboard or just make stuff up.</p>
         <p>
+          <label>Theme:</label>
+          <span class="theme-selector">
+            <a href="#" @click.prevent="theme = n" v-for="n in themeCount" :class="theme == n ? 'active' : ''"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`"></a>
+          </span>
+        </p>
+
+        <p>
           <label for="name">Name:</label>
           <input id="name" v-model.trim="name" type="text" placeholder="Artist name" @change="createImage">
         </p>
@@ -104,13 +111,6 @@
               <span>Calculate automatically (stream count X 0.0038)</span>
             </label>
           </small>
-        </p>
-
-        <p>
-          <label>Theme:</label>
-          <span class="theme-selector">
-            <a href="#" @click.prevent="theme = n" v-for="n in themeCount" :class="theme == n ? 'active' : ''"><img :src="`img/footer-logo-${n}.png`" :alt="`Theme ${n}`"></a>
-          </span>
         </p>
 
         <p>

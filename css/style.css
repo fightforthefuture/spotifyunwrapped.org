@@ -163,6 +163,9 @@ input[type="text"] {
   width: 80%;
   height: 90%;
   position: relative;
+}
+
+.visible-story .content {
   transition: background-color .2s;
 }
 

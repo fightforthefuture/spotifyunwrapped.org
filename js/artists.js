@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     watch: {
       theme() {
-        this.$nextTick(this.createImage)
+        this.createImage()
       },
 
       streams() {
@@ -76,33 +76,35 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     mounted() {
-      this.$nextTick(this.createImage)
+      this.createImage()
     },
 
     methods: {
       async createImage() {
-        console.log('createImage')
+        this.$nextTick(async () => {
+          console.log('createImage')
 
-        const clone = this.$refs.canvas.cloneNode(true)
-        clone.classList.remove('visible-image')
-        clone.classList.add('hidden-image')
-        document.body.appendChild(clone)
+          const clone = this.$refs.canvas.cloneNode(true)
+          clone.classList.remove('visible-image')
+          clone.classList.add('hidden-image')
+          document.body.appendChild(clone)
 
-        window.scrollTo(0, 0)
+          window.scrollTo(0, 0)
 
-        // generate PNG
-        const canvas = await html2canvas(clone, {
-          useCORS: true,
-          scale: 1,
-          width: 1080,
-          height: 1080,
-          allowTaint: true,
+          // generate PNG
+          const canvas = await html2canvas(clone, {
+            useCORS: true,
+            scale: 1,
+            width: 1080,
+            height: 1080,
+            allowTaint: true,
+          })
+
+          canvas.toBlob(blob => {
+            this.imageDataURL = URL.createObjectURL(blob)
+            document.body.removeChild(clone)
+          }, 'image/png')
         })
-
-        canvas.toBlob(blob => {
-          this.imageDataURL = URL.createObjectURL(blob)
-          document.body.removeChild(clone)
-        }, 'image/png')
       },
 
       selectPhoto() {
